@@ -1,0 +1,22 @@
+# Rust
+target/
+Cargo.lock
+
+# macOS
+.DS_Store
+*.dmg
+*.zip
+*.app/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Env
+.env
+*.env.local
+
+# Tauri build artifacts (generated, not committed)
+src-tauri/gen/
