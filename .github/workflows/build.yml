@@ -25,12 +25,6 @@ jobs:
         run: |
           rustc --version
           cargo --version
-          rustup show
-
-      - name: Rust cache
-        uses: swatinem/rust-cache@v2
-        with:
-          workspaces: './src-tauri -> target'
 
       - name: Build Tauri app
         run: cargo build --release
@@ -40,7 +34,6 @@ jobs:
       - name: Bundle as .app
         run: |
           mkdir -p target/release/bundle/mira.app/Contents/{MacOS,Resources}
-
           cp target/release/mira target/release/bundle/mira.app/Contents/MacOS/
 
           cat > target/release/bundle/mira.app/Contents/Info.plist << 'PLIST'
@@ -97,7 +90,6 @@ jobs:
             cd target/release/bundle
             zip -r ../../Mira-0.1.0-macos.zip mira.app
             cd ../..
-            echo "Created ZIP instead of DMG"
           fi
 
       - name: Upload build artifact
