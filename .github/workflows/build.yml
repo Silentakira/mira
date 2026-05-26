@@ -5,7 +5,7 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
-  workflow_dispatch: # Manual trigger from Actions tab
+  workflow_dispatch:
 
 env:
   MIRA_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -21,14 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-
-      - name: Install system dependencies
+      - name: Verify Rust toolchain
         run: |
-          brew install openssl@3
+          rustc --version
+          cargo --version
+          rustup show
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -42,8 +39,7 @@ jobs:
 
       - name: Bundle as .app
         run: |
-          mkdir -p target/release/bundle/mira.app/Contents/MacOS
-          mkdir -p target/release/bundle/mira.app/Contents/Resources
+          mkdir -p target/release/bundle/mira.app/Contents/{MacOS,Resources}
 
           cp target/release/mira target/release/bundle/mira.app/Contents/MacOS/
 
@@ -83,7 +79,7 @@ jobs:
 
       - name: Create DMG
         run: |
-          brew install create-dmg || true
+          brew install create-dmg 2>/dev/null || true
           create-dmg \
             --volname "Mira" \
             --volicon "target/release/bundle/mira.app/Contents/Resources/icon.icns" \
